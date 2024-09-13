@@ -1,0 +1,29 @@
+#include <avr/io.h>
+#include <util/delay.h>
+
+
+void SPI_Masterinit(void);
+void SPI_transmit(unsigned char);
+
+int main(void)
+{
+    SPI_Masterinit();
+    while(1)
+    {
+        SPI_transmit('F');
+        _delay_ms(3000);
+    }
+}
+
+void SPI_Masterinit()
+{
+    DDRB |= (1 << DDB3) | (1 << DDB5); // set MOSI and SCK as output
+    SPCR |= (1 << SPE) | (1 << MSTR) | (1 << SPR0); // enable SPR, set this device as master, set freq
+}
+
+void SPI_transmit(unsigned char t_Data)
+{
+    SPDR = t_Data;
+
+    while (!(SPSR & (1 << SPIF)));
+}
