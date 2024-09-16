@@ -1,34 +1,45 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "UART.h"
+#include "SPI.h"
 
-void SPI_Slaveinit(void);
-void SPI_recive(void);
+char buffer[20];
+uint8_t xIndex = 0;
+
+void get_SPI_Data(void);
 
 int main(void)
 {
-    SPI_Slaveinit();
-    UART_init(BAUD_RATE);
-    
-    _delay_ms(10);
-    while(1)
+
+    init_SPI_Slave();
+
+    while (1)
     {
-        SPI_recive();
-        _delay_ms(100);
+        get_SPI_Data();
     }
 }
 
-void SPI_Slaveinit()
+void get_SPI_Data()
 {
-    DDRB |= (1 << DDB4); 
-    SPCR |= (1 << SPE); // enable SPR, set this device as Slave
-    SerialWrite("Intitialization done\n");
-}
+    uint8_t reset = 0;
+    while (1)
+    {
+        reset += 1;
+        if (reset >=255)
+        {
+            break;
+        }
+        char temp = SPI_Recive();
 
-void SPI_recive()
-{
-    while(!(SPSR & (1 << SPIF)));
-
-    SerialWrite("In recive function\n");
+        if (temp == '\n')
+        {
+            buffer[xIndex] = '\0';
+            xIndex = 0;
+            break;
+        }
+        else
+        {
+            buffer[xIndex++] = temp;
+        }
+    }
 }
