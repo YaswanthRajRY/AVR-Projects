@@ -43,7 +43,3 @@ To run and experiment with these projects, you will need:
     ```
 
 5. Use a terminal as a serial monitor (if applicable) to view output or interact with the project.
-
-## License
-
-This repository is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more details.
