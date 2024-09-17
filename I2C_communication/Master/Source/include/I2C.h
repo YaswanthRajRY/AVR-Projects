@@ -1,3 +1,6 @@
+#include <avr/io.h>
+#include <util/delay.h>
+
 #define SLAVE_ADDR 0x27
 
 void init_I2C(void);

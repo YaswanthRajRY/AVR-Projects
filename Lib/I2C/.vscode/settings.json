@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "i2c.h": "c",
-        "delay.h": "c"
+        "delay.h": "c",
+        "io.h": "c"
     }
 }

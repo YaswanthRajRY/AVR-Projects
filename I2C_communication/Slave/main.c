@@ -1,84 +1,67 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "lcd.h"
+#include "UART.h"
+#include "I2C.h"
 
-void init_SPI_Master(void);
-void init_SPI_Slave(void);
-void SPI_Transmit(unsigned char);
-char SPI_Recive();
-void get_SPI_Data(void);
-
-char buffer[20];
+char buffer[30];
 uint8_t xIndex = 0;
+
+void get_I2C_Data(void);
+void LOG(char*);
 
 int main(void)
 {
     
-    DDRD = 0xFF;
-    DDRC = 0x0F;
+    //DDRD = 0xFF;
+    //DDRC = 0x0F;
+    DDRC |= 0x30;
+    PORTC |= 0x30;
 
-    init_SPI_Slave();
-    init_LCD();
+    init_I2C_Slave();
+    init_UART();
 
     while (1)
     {
-        get_SPI_Data();
+        get_I2C_Data();
     }
 }
 
-void init_SPI_Master()
+void get_I2C_Data()
 {
-    DDRB |= (1 << DDB5) | (1 << DDB3) | (1 << DDB2);
-    PORTB |= (1 << PORTB2);
-    SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0);
-}
-
-void init_SPI_Slave()
-{
-    DDRB |= (1 << DDB4);
-    SPCR = (1 << SPE);
-}
-
-void SPI_Transmit(unsigned char tData)
-{
-    PORTB &= ~(1 << PORTB2);
-
-    SPDR = tData;
-
-    while (!(SPSR & (1 << SPIF)));
-    PORTB |= (1 << PORTB2);
-}
-
-char SPI_Recive()
-{
-    while (!(SPSR & (1 << SPIF)));
-
-    return SPDR;
-}
-
-void get_SPI_Data()
-{
-    uint8_t reset = 0;
+    uint8_t temp = 0;
+    if (I2C_Slave_SLA_W())
+    {
+        I2C_SlaveRx(&temp);
+        UART_Transmit(temp);
+    }
+/*
     while (1)
     {
-        reset += 1;
-        if (reset >=255)
+        if (I2C_Slave_SLA_W())
         {
-            break;
-        }
-        char temp = SPI_Recive();
+            I2C_SlaveRx(&temp);
+            //UART_Transmit(temp);
 
-        if (temp == '\n')
-        {
-            buffer[xIndex] = '\0';
-            xIndex = 0;
-            break;
-        }
-        else
-        {
             buffer[xIndex++] = temp;
+
+            if (temp == '\r')
+            {
+                break;
+            }
         }
     }
-    LCD_Write_String(buffer);
+    buffer[xIndex] = '\0';
+    
+    LOG(buffer);
+*/
+}
+
+void LOG(char* s)
+{
+    while (*s)
+    {
+        UART_Transmit(*s);
+        s++;
+    }
 }

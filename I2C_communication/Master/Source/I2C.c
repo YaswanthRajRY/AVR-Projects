@@ -1,13 +1,7 @@
-#include <avr/io.h>
-#include <util/delay.h>
-
 #include "I2C.h"
 
 void init_I2C()
 {
-    DDRB |= 0x30;
-    PORTB |= 0x30;
-
     TWBR = 0x0C;
     TWSR = 0x00;
     TWCR |= (1 << TWEN);
@@ -15,9 +9,6 @@ void init_I2C()
 
 void init_I2C_Slave(void)
 {
-    DDRB |= 0x30;
-    PORTB |= 0x30;
-
     TWAR = (SLAVE_ADDR << 1);
     TWCR |= (1 << TWEA) | (1 << TWEN);
 }
@@ -146,7 +137,7 @@ uint8_t I2C_SlaveTx(uint8_t tData)
 uint8_t I2C_SlaveRx(uint8_t* tData)
 {
     TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWEA);
-    
+
     while (!(TWCR & (1 << TWINT)));
     
     *tData = TWDR;

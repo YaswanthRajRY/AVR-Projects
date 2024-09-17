@@ -19,7 +19,7 @@ MCU2=ATMEGA328P
 F_CPU=16000000UL
 
 # Hardware serial port 
-PORT=/dev/ttyACM0
+PORT=/dev/ttyUSB0
 
 # Program source files
 TARGET=main
