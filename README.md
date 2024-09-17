@@ -24,7 +24,7 @@ To run and experiment with these projects, you will need:
 
 1. Clone the repository:
     ```
-    [git clone https://github.com/your-username/AVR-Projects.git](https://github.com/YaswanthRajRY/AVR-Projects.git)
+    gh repo clone YaswanthRajRY/AVR-Projects
     ```
 
 2. Navigate to the project folder of your choice:
