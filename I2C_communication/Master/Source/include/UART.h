@@ -3,5 +3,6 @@
 #define BAUD 9600
 #define BAUD_RATE ((CPU_FREQ/16/BAUD) - 1)
 
-void UART_init(uint16_t);
-void SerialWrite(const char*);
+void init_UART();
+void UART_Transmit(unsigned char);
+char UART_Receive(void);
