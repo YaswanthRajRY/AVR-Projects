@@ -17,8 +17,10 @@ int main(void)
 
     while (1)
     {
+        PORTB &= ~(1 << PORTB2);
         char* s = incCounter(counter++);
         sendString(s);
+        PORTB |= (1 << PORTB2);
         _delay_ms(1000);
     }
 }
@@ -32,12 +34,12 @@ void init_SPI_Master()
 
 void SPI_Transmit(unsigned char tData)
 {
-    PORTB &= ~(1 << PORTB2);
+    //PORTB &= ~(1 << PORTB2);
 
     SPDR = tData;
 
     while (!(SPSR & (1 << SPIF)));
-    PORTB |= (1 << PORTB2);
+    //PORTB |= (1 << PORTB2);
 }
 
 void sendString(char* str)

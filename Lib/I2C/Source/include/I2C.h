@@ -3,7 +3,7 @@
 
 #define SLAVE_ADDR 0x27
 
-void init_I2C(void);
+void init_I2C_Master(void);
 void init_I2C_Slave(void);
 
 uint8_t I2C_Start(void);

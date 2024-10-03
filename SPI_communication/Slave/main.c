@@ -2,12 +2,14 @@
 #include <util/delay.h>
 
 #include "lcd.h"
+#include "UART.h"
 
 void init_SPI_Master(void);
 void init_SPI_Slave(void);
 void SPI_Transmit(unsigned char);
 char SPI_Recive();
 void get_SPI_Data(void);
+void LOG(char*);
 
 char buffer[20];
 uint8_t xIndex = 0;
@@ -20,6 +22,7 @@ int main(void)
 
     init_SPI_Slave();
     init_LCD();
+    init_UART();
 
     while (1)
     {
@@ -80,5 +83,16 @@ void get_SPI_Data()
             buffer[xIndex++] = temp;
         }
     }
+    LOG(buffer);
     LCD_Write_String(buffer);
+}
+
+void LOG(char* s)
+{
+    while (*s)
+    {
+        UART_Transmit(*s++);
+    }
+    UART_Transmit('\n');
+    UART_Transmit('\r');
 }
