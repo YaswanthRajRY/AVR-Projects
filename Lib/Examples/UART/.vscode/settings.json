@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "delay.h": "c",
+        "lcd_i2c.h": "c",
+        "uart.h": "c"
+    }
+}
